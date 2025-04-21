@@ -25,7 +25,4 @@ setup(
         "scipy",
         "streamlit"
     ],
-    dependency_links=[
-        "git+https://github.com/rongardF/tvdatafeed.git"
-    ],
 )
