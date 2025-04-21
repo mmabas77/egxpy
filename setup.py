@@ -23,8 +23,7 @@ setup(
         "XlsxWriter",
         "plotly",
         "scipy",
-        "streamlit",
-        "tvDatafeed"
+        "streamlit"
     ],
     dependency_links=[
         "git+https://github.com/rongardF/tvdatafeed.git"
