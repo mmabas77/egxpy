@@ -24,7 +24,7 @@ Webapp: https://egxpy-lab.streamlit.app/
 ## Installation & Usage 🛠️  
 1. Install this repository:  
    ```bash
-   pip install git+https://github.com/omar-Abouyoussef/egxpy.git
+   pip install --no-cache-dir git+https://github.com/omar-Abouyoussef/egxpy.git
 2. Install the Dependencies:
     ```bash
    pip install -r requirements.txt```
