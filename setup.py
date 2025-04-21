@@ -1,6 +1,5 @@
 from setuptools import setup
 
-
 setup(
     name="egxpy",
     version="1.1.0",
@@ -9,7 +8,6 @@ setup(
     project_urls={
         "Web App": "https://egxpy-lab.streamlit.app/",
         "Source": "https://github.com/omar-Abouyoussef/egxpy/",
-        # "Tracker": "https://github.com/omar-Abouyoussef/egxpy/issues",
     },
     license="MIT License",
     author="@omar-Abouyoussef",
@@ -20,10 +18,14 @@ setup(
         "setuptools",
         "pandas",
         "numpy",
-        "datetime",
         "holidays",
         "retry",
-        "tvDatafeed",
-        "scipy"
+        "XlsxWriter",
+        "plotly",
+        "scipy",
+        "streamlit"
+    ],
+    dependency_links=[
+        "git+https://github.com/rongardF/tvdatafeed.git"
     ],
 )
