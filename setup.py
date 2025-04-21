@@ -22,9 +22,7 @@ setup(
         "retry",
         "XlsxWriter",
         "plotly",
-        "scipy"
-    ],
-    dependency_links=[
-        "git+https://github.com/rongardF/tvdatafeed.git"
-    ],
+        "scipy",
+        "tvDatafeed @ git+https://github.com/rongardF/tvdatafeed.git"
+    ]
 )
