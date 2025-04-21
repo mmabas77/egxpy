@@ -23,6 +23,6 @@ setup(
         "XlsxWriter",
         "plotly",
         "scipy",
-        "tvDatafeed @ git+https://github.com/rongardF/tvdatafeed.git"
+        "tvDatafeed @ git+https://github.com/rongardF/tvdatafeed.git@main"
     ]
 )
