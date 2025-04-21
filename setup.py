@@ -23,6 +23,7 @@ setup(
         "XlsxWriter",
         "plotly",
         "scipy",
-        "streamlit"
+        "streamlit",
+        "git+https://github.com/rongardF/tvdatafeed.git"
     ],
 )
