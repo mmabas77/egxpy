@@ -24,6 +24,6 @@ setup(
         "plotly",
         "scipy",
         "streamlit",
-        "git+https://github.com/rongardF/tvdatafeed.git"
+        "tvDatafeed"
     ],
 )
