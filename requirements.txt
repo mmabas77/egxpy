@@ -1,7 +1,6 @@
 numpy 
 pandas
 datetime
-streamlit
 holidays
 retry
 XlsxWriter
