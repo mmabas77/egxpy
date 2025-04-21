@@ -8,3 +8,4 @@ XlsxWriter
 plotly
 scipy
 git+https://github.com/rongardF/tvdatafeed.git
+
