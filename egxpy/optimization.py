@@ -5,11 +5,6 @@ import plotly.express as px
 import scipy.optimize as sc
 
 
-
-
-import numpy as np
-import pandas as pd
-
 def _stock_performance(close):
     """Calculates expected mean returns and covariance matrix of stock returns.
 
