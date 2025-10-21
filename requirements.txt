@@ -12,3 +12,6 @@ git+https://github.com/rongardF/tvdatafeed.git
 requests>=2.28.0
 vaderSentiment>=3.3.2
 textblob>=0.17.1
+
+# Company name lookup (optional but recommended)
+yfinance>=0.2.0

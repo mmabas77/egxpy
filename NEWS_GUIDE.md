@@ -26,6 +26,12 @@ EGXpy now includes comprehensive news fetching capabilities with sentiment analy
   - Focuses on Egyptian market and financial keywords
   - Configurable relevance threshold
 
+- **Automatic Company Name Lookup** (NEW!):
+  - Built-in database of 87+ Egyptian Exchange (EGX) companies
+  - Automatic ticker-to-company name resolution
+  - yfinance integration for international stocks
+  - Just provide the ticker - company name is auto-detected!
+
 ## Quick Start
 
 ### 1. Install Dependencies
@@ -38,6 +44,7 @@ This will install:
 - `requests` - For API calls
 - `vaderSentiment` - For sentiment analysis
 - `textblob` - Alternative sentiment analyzer
+- `yfinance` - For automatic company name lookup (optional but recommended)
 
 ### 2. Configure API Keys (Optional)
 
@@ -72,12 +79,18 @@ from egxpy.news import NewsFetcher
 # Initialize the news fetcher
 fetcher = NewsFetcher()
 
-# Fetch news for a specific stock
+# Fetch news for a specific stock - company name is auto-detected!
 articles = fetcher.fetch_news_for_ticker(
-    ticker='COMI',
-    company_name='Commercial International Bank',
+    ticker='COMI',  # Just provide the ticker - no company name needed!
     days_back=7
 )
+
+# Or if you prefer, you can still provide the company name manually:
+# articles = fetcher.fetch_news_for_ticker(
+#     ticker='COMI',
+#     company_name='Commercial International Bank',
+#     days_back=7
+# )
 
 # Display articles
 for article in articles[:5]:
@@ -298,6 +311,75 @@ for stock in stocks:
     sentiment = fetcher.get_sentiment_summary(articles)
     print(f"{stock}: {sentiment['average_sentiment']:.2f}")
 ```
+
+## Automatic Company Name Lookup
+
+### How It Works
+
+The system automatically looks up company names for ticker symbols using:
+
+1. **Built-in EGX Database** (87+ Egyptian companies) - Instant, no API calls
+2. **yfinance Library** (if installed) - Free, works for international stocks
+3. **Cache** - Remembers previous lookups
+
+### Usage
+
+```python
+from egxpy.news import NewsFetcher
+
+fetcher = NewsFetcher()
+
+# Just provide the ticker - company name is automatically resolved!
+articles = fetcher.fetch_news_for_ticker('COMI')  # Auto-detects "Commercial International Bank"
+articles = fetcher.fetch_news_for_ticker('ETEL')  # Auto-detects "Egyptian Company for Mobile Services"
+articles = fetcher.fetch_news_for_ticker('HRHO')  # Auto-detects "Hermes Holding Company"
+```
+
+### Direct Company Lookup
+
+You can also use the company lookup module directly:
+
+```python
+from egxpy.company_lookup import CompanyLookup
+
+lookup = CompanyLookup()
+
+# Get company name from ticker
+company = lookup.get_company_name('COMI')
+print(company)  # "Commercial International Bank"
+
+# Reverse lookup: find ticker from company name
+ticker = lookup.search_by_company_name('Commercial')
+print(ticker)  # "COMI"
+
+# Get all EGX companies
+all_companies = lookup.get_all_egx_tickers()
+print(f"Total companies: {len(all_companies)}")  # 87+
+
+# Add custom mapping
+lookup.add_custom_mapping('MYCO', 'My Custom Company')
+```
+
+### Supported EGX Companies
+
+The built-in database includes 87+ Egyptian Exchange companies across all sectors:
+- **Banks**: COMI, CIEB, SAIB, ADIB, QNBA, etc.
+- **Telecommunications**: ETEL, ORTE, GTHE
+- **Real Estate**: PHDC, MNHD, THDC, SODIC, etc.
+- **Industrial**: SWDY, IRON, ALCN, SKPC, etc.
+- **Consumer Goods**: JUFO, DFRE, EDBR, etc.
+- **Investment & Holding**: HRHO, PIOH, CCAP, etc.
+- **And many more...**
+
+Run `python egxpy/company_lookup.py` to see the full list.
+
+### Benefits
+
+✓ **No manual company name entry** - Just use tickers!
+✓ **Better news results** - Searches by both ticker AND company name
+✓ **Free** - No API keys required for EGX stocks
+✓ **Fast** - Built-in database lookup is instant
+✓ **Extensible** - Add custom mappings as needed
 
 ## Contributing
 

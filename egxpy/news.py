@@ -29,6 +29,17 @@ try:
 except ImportError as e:
     raise ImportError(f"Required dependency missing: {e}. Please install requirements.txt")
 
+# Import company lookup module
+try:
+    from .company_lookup import CompanyLookup
+except ImportError:
+    # Fallback if module structure is different
+    try:
+        from company_lookup import CompanyLookup
+    except ImportError:
+        logger.warning("CompanyLookup module not found - automatic company name lookup disabled")
+        CompanyLookup = None
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -495,6 +506,14 @@ class NewsFetcher:
         self.cache = NewsCache(cache_dir, cache_duration_hours=self.config.get('cache_duration_hours', 24))
         self.sentiment_analyzer = SentimentAnalyzer(method=self.config.get('sentiment_method', 'vader'))
 
+        # Initialize company lookup for automatic company name resolution
+        if CompanyLookup is not None:
+            self.company_lookup = CompanyLookup()
+            logger.info("Company name lookup enabled")
+        else:
+            self.company_lookup = None
+            logger.warning("Company name lookup disabled - install yfinance for better results")
+
         # Initialize news sources
         self.sources = {}
 
@@ -610,23 +629,38 @@ class NewsFetcher:
 
         Args:
             ticker: Stock ticker symbol (e.g., 'COMI' for Commercial International Bank)
-            company_name: Full company name for better search results
+            company_name: Full company name for better search results (optional - will be auto-detected for EGX stocks)
             days_back: Number of days to look back
             min_relevance: Minimum relevance score (0.0 to 1.0)
 
         Returns:
             List of relevant news articles with sentiment analysis
+
+        Note:
+            If company_name is not provided, the system will automatically look it up using:
+            1. Built-in Egyptian Exchange (EGX) database (100+ companies)
+            2. yfinance library (if installed) for international stocks
+            3. Cached previous lookups
         """
         if min_relevance is None:
             min_relevance = self.config.get('relevance_threshold', 0.3)
 
         all_articles = []
 
+        # Automatically lookup company name if not provided
+        if company_name is None and self.company_lookup is not None:
+            auto_company_name = self.company_lookup.get_company_name(ticker)
+            if auto_company_name:
+                company_name = auto_company_name
+                logger.info(f"Automatically resolved {ticker} -> {company_name}")
+
         # Construct search query
         if company_name:
             query = f"{ticker} OR {company_name}"
+            logger.debug(f"Search query: {query}")
         else:
             query = ticker
+            logger.debug(f"Search query (company name not found): {query}")
 
         # Calculate date range
         to_date = datetime.now()
@@ -801,11 +835,12 @@ if __name__ == "__main__":
     # Initialize news fetcher
     fetcher = NewsFetcher()
 
-    # Example: Fetch news for a ticker
-    print("\nFetching news for ticker 'COMI' (Commercial International Bank)...")
+    # Example: Fetch news for a ticker with automatic company name lookup
+    print("\nExample 1: Automatic company name lookup")
+    print("-" * 50)
+    print("Fetching news for ticker 'COMI' (no company name provided)...")
     articles = fetcher.fetch_news_for_ticker(
-        ticker='COMI',
-        company_name='Commercial International Bank',
+        ticker='COMI',  # Company name will be auto-detected!
         days_back=7
     )
 
