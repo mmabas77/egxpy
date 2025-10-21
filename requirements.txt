@@ -15,3 +15,6 @@ textblob>=0.17.1
 
 # Company name lookup (optional but recommended)
 yfinance>=0.2.0
+
+# Email notifications (optional - only needed if using SendGrid provider)
+# sendgrid>=6.9.0

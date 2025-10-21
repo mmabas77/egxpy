@@ -16,6 +16,46 @@
     "sentiment_method": "vader",
     "cache_duration_hours": 24,
     "relevance_threshold": 0.3,
+    "email": {
+        "enabled": false,
+        "provider": "smtp",
+        "smtp_config": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "use_tls": true,
+            "username": "your_email@gmail.com",
+            "password": "your_app_password_here",
+            "sender": "EGXpy Alerts <your_email@gmail.com>",
+            "note": "For Gmail, use App Password (not regular password). Go to: https://myaccount.google.com/apppasswords"
+        },
+        "sendgrid_config": {
+            "api_key": "YOUR_SENDGRID_API_KEY",
+            "sender": "alerts@yourdomain.com",
+            "note": "Get free API key from https://sendgrid.com/ (100 emails/day free tier)"
+        },
+        "alert_recipients": [
+            "your_email@example.com"
+        ],
+        "digest_recipients": [
+            "your_email@example.com"
+        ],
+        "alert_thresholds": {
+            "positive_sentiment_threshold": 0.7,
+            "negative_sentiment_threshold": -0.6,
+            "min_articles_for_alert": 3,
+            "send_breaking_news": true,
+            "send_daily_digest": false,
+            "digest_time": "08:00"
+        },
+        "notes": {
+            "provider": "Use 'smtp' for Gmail/Outlook or 'sendgrid' for SendGrid service",
+            "alert_recipients": "List of email addresses to receive sentiment alerts",
+            "digest_recipients": "List of email addresses to receive daily digest emails",
+            "positive_sentiment_threshold": "Send alert when average sentiment >= this value (0 to 1)",
+            "negative_sentiment_threshold": "Send alert when average sentiment <= this value (-1 to 0)",
+            "min_articles_for_alert": "Minimum number of articles required to trigger alert"
+        }
+    },
     "notes": {
         "sentiment_method": "Use 'vader' (better for financial text) or 'textblob' for sentiment analysis",
         "cache_duration_hours": "How long to cache news data before refreshing (in hours)",
