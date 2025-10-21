@@ -7,7 +7,11 @@ import pandas as pd
 import numpy as np
 import holidays
 from datetime import datetime as dt
-import streamlit as st
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 @retry((Exception), tries=20, delay=0.5, backoff=0)
@@ -99,12 +103,25 @@ def get_EGXdata(stock_list:list, interval:str, start:date, end:date):
 
 
     close_prices_dic = {}
-    try:
-        for stock in stock_list:
+    failed_stocks = []
+
+    for stock in stock_list:
+        try:
             close = _get_close_price_data(symbol=stock,exchange='EGX',interval=interval,n_bars=n)
-            close_prices_dic[stock]=close
-    except:
-        pass
+            close_prices_dic[stock] = close
+            logger.info(f"Successfully fetched data for {stock}")
+        except Exception as e:
+            logger.error(f"Failed to fetch data for {stock}: {str(e)}")
+            failed_stocks.append(stock)
+            continue
+
+    if failed_stocks:
+        logger.warning(f"Failed to fetch data for {len(failed_stocks)} stocks: {', '.join(failed_stocks)}")
+
+    if not close_prices_dic:
+        logger.error("No data fetched for any stocks")
+        return pd.DataFrame()
+
     df = pd.concat(close_prices_dic,axis=1)
     df.index = pd.to_datetime(df.index.date)
     df.index.name = 'Date'
@@ -131,12 +148,25 @@ def get_EGX_intraday_data(stock_list:list, interval:str, start:date, end:date):
 
 
     close_prices_dic = {}
-    try:
-        for stock in stock_list:
+    failed_stocks = []
+
+    for stock in stock_list:
+        try:
             close = _get_intraday_close_price_data(symbol=stock,exchange='EGX',interval=interval,n_bars=n)
-            close_prices_dic[stock]=close
-    except:
-        pass
+            close_prices_dic[stock] = close
+            logger.info(f"Successfully fetched intraday data for {stock}")
+        except Exception as e:
+            logger.error(f"Failed to fetch intraday data for {stock}: {str(e)}")
+            failed_stocks.append(stock)
+            continue
+
+    if failed_stocks:
+        logger.warning(f"Failed to fetch intraday data for {len(failed_stocks)} stocks: {', '.join(failed_stocks)}")
+
+    if not close_prices_dic:
+        logger.error("No intraday data fetched for any stocks")
+        return pd.DataFrame()
+
     df = pd.concat(close_prices_dic,axis=1)
 
     return df.loc[start:end,:].tz_localize("Europe/London").tz_convert("UTC+02:00")

@@ -1,0 +1,24 @@
+{
+    "newsapi": {
+        "enabled": false,
+        "api_key": "YOUR_NEWSAPI_KEY_HERE",
+        "note": "Get free API key from https://newsapi.org/ (100 requests/day free tier)"
+    },
+    "alphavantage": {
+        "enabled": false,
+        "api_key": "YOUR_ALPHAVANTAGE_KEY_HERE",
+        "note": "Get free API key from https://www.alphavantage.co/support/#api-key (25 requests/day free tier)"
+    },
+    "gdelt": {
+        "enabled": true,
+        "note": "GDELT is completely free and requires no API key - provides global news coverage including Egyptian sources"
+    },
+    "sentiment_method": "vader",
+    "cache_duration_hours": 24,
+    "relevance_threshold": 0.3,
+    "notes": {
+        "sentiment_method": "Use 'vader' (better for financial text) or 'textblob' for sentiment analysis",
+        "cache_duration_hours": "How long to cache news data before refreshing (in hours)",
+        "relevance_threshold": "Minimum relevance score (0.0-1.0) for articles to be included"
+    }
+}
